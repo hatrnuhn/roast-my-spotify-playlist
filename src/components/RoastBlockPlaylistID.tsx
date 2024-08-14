@@ -45,9 +45,22 @@ const RoastBlockPast: FC<RoastBlockPastProps> = ({ playlistId, marginAuto }) => 
             setRoast(generatedRoast)
             await storeLocally(generatedRoast)
         } catch (err) {
-            if (err instanceof AxiosError && err.response?.status === 404) 
-                setErrorMsg('Playlist could not be found')
-            else 
+            if (err instanceof AxiosError) {
+                switch (err.response?.status) {
+                    case 400:
+                        setErrorMsg(`${playlistId} is invalid`)
+                        break;
+                    case 404:
+                        setErrorMsg(`Playlist with ID ${playlistId} could not be found`)
+                        break;
+                    case 429:
+                        setErrorMsg('Too many requests')
+                        break;
+                    default: 
+                        setErrorMsg('Could not generate, try again')
+                        break;
+                }
+            } else 
                 setErrorMsg('Could not generate, try again')
         }
     }, [setRoast, storeLocally, language, playlistId])
