@@ -1,4 +1,4 @@
-import { FC, memo, useCallback, useEffect, useState } from "react"
+import { FC, memo, useCallback, useEffect, useRef, useState } from "react"
 import axios from "../axios"
 import { Roast } from "../types"
 import useMainContext from "../hooks"
@@ -15,6 +15,7 @@ const RoastBlockPast: FC<RoastBlockPastProps> = ({ playlistId, marginAuto }) => 
     const [roast, setRoast] = useState<Roast>()
     const [errorMsg, setErrorMsg] = useState('')
     const { language } = useMainContext()
+    const languageRef = useRef(language)
 
     const storeLocally = useCallback(async (roast: Roast) => {
         try {
@@ -24,7 +25,7 @@ const RoastBlockPast: FC<RoastBlockPastProps> = ({ playlistId, marginAuto }) => 
                 if (history.size && history.size < 500 * 1000)
                     await history.set([ ...data, roast ])
                 else
-                    await history.set([ ...data.slice(-100), roast])
+                    await history.set([ ...data.slice(0, 99), roast])
             }
             else
                 await history.set([ roast ])
@@ -38,7 +39,7 @@ const RoastBlockPast: FC<RoastBlockPastProps> = ({ playlistId, marginAuto }) => 
         try {
             const res = await axios.post('/roasts', {
                 playlistId,
-                language
+                language: languageRef.current
             })
 
             const generatedRoast = res.data as Roast
@@ -63,7 +64,7 @@ const RoastBlockPast: FC<RoastBlockPastProps> = ({ playlistId, marginAuto }) => 
             } else 
                 setErrorMsg('Could not generate, try again')
         }
-    }, [setRoast, storeLocally, language, playlistId])
+    }, [setRoast, storeLocally, playlistId])
 
     useEffect(() => {
         generate()
