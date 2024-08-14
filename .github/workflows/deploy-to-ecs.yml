@@ -1,0 +1,44 @@
+name: Deploy to ECS
+
+on:
+  push:
+    branches:
+      - main  # Change to your default branch if different
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'  # Specify the version of Node.js you are using
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Install SSH client
+        run: sudo apt-get install -y openssh-client
+  
+      - name: Add SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to ECS
+        run: |
+          scp -o StrictHostKeyChecking=no -r dist ${{ vars.ECS_USER }}@${{ vars.ECS_HOST }}:/home/${{ vars.ECS_USER }}/${{ vars.ROOT_NAME }}
+          ssh -o StrictHostKeyChecking=no ${{ vars.ECS_USER }}@${{ vars.ECS_HOST }} << 'EOF'
+            set -e
+            ls /home/${{ vars.ECS_USER }}/${{ vars.ROOT_NAME }}
+            sudo rm -rf /var/${{ vars.ROOT_NAME }}
+            sudo mv /home/${{ vars.ECS_USER }}/${{ vars.ROOT_NAME }} /var/${{ vars.ROOT_NAME }}
+            sudo ls /var/${{ vars.ROOT_NAME }}
+          EOF
