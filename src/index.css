@@ -30,12 +30,11 @@
   }
 
   .input-error {
-    transform: scaleY(0);
+    @apply translate-y-0
   }
 
   .input-error-active {
-    transform: scaleY(100%);
-    transition: transform 0.3s ease-out;
+    @apply -translate-y-2 ease-in-out
   }
 
   .list-icon {

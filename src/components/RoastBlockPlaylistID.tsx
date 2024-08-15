@@ -52,7 +52,7 @@ const RoastBlockPast: FC<RoastBlockPastProps> = ({ playlistId, marginAuto }) => 
                         setErrorMsg(`${playlistId} is invalid`)
                         break;
                     case 404:
-                        setErrorMsg(`Playlist with ID ${playlistId} could not be found`)
+                        setErrorMsg(`Playlist with ID ${playlistId} could not be found, make sure it's made public`)
                         break;
                     case 429:
                         setErrorMsg('Too many requests')

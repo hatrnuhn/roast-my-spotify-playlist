@@ -20,7 +20,7 @@ const RoastBlock: FC<RoastBlockProps> = ({ errorMsg, marginAuto, playlistId, roa
         >
         {
             errorMsg.length > 0 ? 
-                <span className="bg-red-800 text-gray-300 text-sm px-3 py-1 rounded-full shadow">{errorMsg}</span> :
+                <p className="bg-red-800 text-gray-300 text-sm px-3 py-2 text-sm rounded-full text-center shadow">{errorMsg}</p> :
                 <>
                     <PlaylistChip playlistId={playlistId}/>
                     <RoastPaper roast={roast} />

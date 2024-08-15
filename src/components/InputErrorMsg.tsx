@@ -12,7 +12,7 @@ const InputErrorMsg: FC<InputErrorMsgProps> = ({ errorMsg }) => {
     }, [])
 
     return (
-        <p className={`text-black absolute -top-4 text-xs bg-red-800 text-gray-300 font-semibold px-2 rounded-md transition-all ${show ? 'input-error-active' : 'input-error'}`} role='alert'>{errorMsg}</p>
+        <p className={`absolute text-center translate-x-2 -top-4 text-xs bg-red-800 text-gray-200 font-semibold px-2 py-1 rounded-t-md pb-5 transition-all shadow ${show ? 'input-error-active' : 'input-error'}`} role='alert'>{errorMsg}</p>
     )
 }
 
