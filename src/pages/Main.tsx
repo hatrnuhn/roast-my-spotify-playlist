@@ -15,12 +15,16 @@ const MainPage = () => {
         try {
             const data = await history.get()
             if (data)
-                setPastRoasts(data)    
+                setPastRoasts(data)
         } catch (err) {
             console.error(err)
             setIsGettingPastRoastsError(true)
         }
     }, [setPastRoasts])
+
+    useEffect(() => {
+        divRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }, [pastRoasts])
 
     useEffect(() => {
         getPastRoasts()

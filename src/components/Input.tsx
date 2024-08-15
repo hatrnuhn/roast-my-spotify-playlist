@@ -21,7 +21,7 @@ const Input: FC<InputProps> = ({ pushFn }) => {
         try {
             return new URL(string)
         } catch (err) {
-            return false
+            if (err) return false
         }
     }
 
